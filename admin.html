@@ -892,19 +892,39 @@ function changePassword() {
 
 // ════ CATEGORIES ════
 const DEFAULT_CATS = [
-  {id:'women', name:'ملابس المرأة', img:'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=200&q=80'},
-  {id:'men',   name:'ملابس الرجال', img:'https://images.unsplash.com/photo-1617137968427-85924c800a22?w=200&q=80'},
-  {id:'acc',   name:'إكسسوارات',    img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&q=80'},
-  {id:'kids',  name:'أطفال',        img:'https://images.unsplash.com/photo-1514090458221-65bb69cf63e6?w=200&q=80'},
+  {id:'women',   active:true,  name:'ملابس المرأة',    img:'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=200&q=80'},
+  {id:'men',     active:true,  name:'ملابس الرجال',    img:'https://images.unsplash.com/photo-1617137968427-85924c800a22?w=200&q=80'},
+  {id:'acc',     active:true,  name:'إكسسوارات',       img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&q=80'},
+  {id:'kids',    active:true,  name:'أطفال',           img:'https://images.unsplash.com/photo-1514090458221-65bb69cf63e6?w=200&q=80'},
+  {id:'beauty',  active:false, name:'مكياج وعناية',    img:'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=200&q=80'},
+  {id:'shoes',   active:false, name:'أحذية',           img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&q=80'},
+  {id:'bags',    active:false, name:'حقائب',           img:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=200&q=80'},
+  {id:'watches', active:false, name:'ساعات',           img:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&q=80'},
+  {id:'jewelry', active:false, name:'مجوهرات',         img:'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=200&q=80'},
+  {id:'perfume', active:false, name:'عطور',            img:'https://images.unsplash.com/photo-1541643600914-78b084683702?w=200&q=80'},
+  {id:'sports',  active:false, name:'رياضة ولياقة',    img:'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=200&q=80'},
+  {id:'home',    active:false, name:'منزل وديكور',     img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200&q=80'},
+  {id:'tech',    active:false, name:'إلكترونيات',      img:'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=200&q=80'},
+  {id:'health',  active:false, name:'صحة وعافية',      img:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=200&q=80'},
+  {id:'suncare', active:false, name:'عناية بالشعر',    img:'https://images.unsplash.com/photo-1526045612212-70caf35c14df?w=200&q=80'},
+  {id:'lingerie',active:false, name:'ملابس داخلية',    img:'https://images.unsplash.com/photo-1594938298603-c8148c4b3691?w=200&q=80'},
+  {id:'swim',    active:false, name:'ملابس سباحة',     img:'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=200&q=80'},
+  {id:'winter',  active:false, name:'ملابس شتوية',     img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&q=80'},
+  {id:'toys',    active:false, name:'ألعاب أطفال',     img:'https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=200&q=80'},
+  {id:'school',  active:false, name:'مستلزمات مدرسية', img:'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=200&q=80'},
 ];
 let cats = getData('rw_categories', DEFAULT_CATS);
 
 function renderCategoriesAdmin() {
   const list = document.getElementById('categories-list');
   list.innerHTML = cats.map((c,i) => `
-    <div style="background:var(--bg);border-radius:14px;padding:16px;border:1px solid var(--border)">
+    <div style="background:var(--bg);border-radius:14px;padding:16px;border:1px solid ${c.active?'rgba(201,168,76,0.5)':'var(--border)'};position:relative;opacity:${c.active?'1':'0.65'}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <span style="font-size:12px;font-weight:600;color:${c.active?'var(--gold)':'#666'}">${c.active?'● مفعّل':'○ معطّل'}</span>
+        <label class="toggle" style="margin:0"><input type="checkbox" ${c.active?'checked':''} onchange="cats[${i}].active=this.checked;saveCats();renderCategoriesAdmin()"><span class="toggle-slider"></span></label>
+      </div>
       <div style="text-align:center;margin-bottom:12px">
-        <img src="${c.img||''}" onerror="this.style.display='none'" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);display:${c.img?'inline-block':'none'}">
+        <img src="${c.img||''}" onerror="this.style.display='none'" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);display:${c.img?'inline-block':'none'}">
       </div>
       <div class="form-group" style="margin-bottom:10px">
         <label class="form-label">اسم القسم</label>
