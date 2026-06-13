@@ -885,7 +885,7 @@ const DEFAULT_CATS = [
   {id:'acc',   name:'إكسسوارات',    img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&q=80'},
   {id:'kids',  name:'أطفال',        img:'https://images.unsplash.com/photo-1514090458221-65bb69cf63e6?w=200&q=80'},
 ];
-let cats = getRWData('rw_categories', DEFAULT_CATS);
+let cats = getData('rw_categories', DEFAULT_CATS);
 
 function renderCategoriesAdmin() {
   const list = document.getElementById('categories-list');
