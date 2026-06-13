@@ -743,12 +743,7 @@ textarea.form-input{min-height:80px;resize:vertical}
         </div>
         <div class="form-group">
           <label class="form-label">الفئة <span>*</span></label>
-          <select class="form-input" id="p-cat">
-            <option value="women">ملابس المرأة</option>
-            <option value="men">ملابس الرجال</option>
-            <option value="acc">إكسسوارات</option>
-            <option value="kids">أطفال</option>
-          </select>
+          <select class="form-input" id="p-cat"></select>
         </div>
         <div class="form-group">
           <label class="form-label">الوسم</label>
@@ -1038,6 +1033,12 @@ function renderProducts() {
   `).join('');
 }
 
+function populateCatDropdown(selectedId) {
+  const sel = document.getElementById('p-cat');
+  const activeCats = cats.filter(c => c.active !== false);
+  sel.innerHTML = activeCats.map(c => `<option value="${c.id}" ${c.id===selectedId?'selected':''}>${c.name}</option>`).join('');
+}
+
 function openProductModal(id) {
   const modal = document.getElementById('product-modal-overlay');
   editingColors = [];
@@ -1050,7 +1051,7 @@ function openProductModal(id) {
     document.getElementById('p-name-en').value = p.nameEn||'';
     document.getElementById('p-price').value = p.price;
     document.getElementById('p-old-price').value = p.oldPrice||'';
-    document.getElementById('p-cat').value = p.cat;
+    populateCatDropdown(p.cat);
     document.getElementById('p-badge').value = p.badge||'';
     document.getElementById('p-img').value = p.img||'';
     document.getElementById('p-status').value = p.status||'available';
@@ -1061,7 +1062,6 @@ function openProductModal(id) {
     document.getElementById('product-modal-title').textContent = 'إضافة منتج جديد';
     document.getElementById('edit-id').value = '';
     ['p-name','p-name-en','p-price','p-old-price','p-img','p-rating','p-img-data'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('p-cat').value='women';
     document.getElementById('p-badge').value='';
     document.getElementById('p-status').value='available';
     editingColors = ['#1a1a1a','#c9a84c'];
