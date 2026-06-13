@@ -917,12 +917,19 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(201,168,76,0.15); }
 .brand-item:hover { color: var(--gray-900); }
 
 /* ── ABOUT ── */
-#about { padding: 100px 0; }
+#about { padding: 0; position: relative; min-height: 260px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+#about::after { content:''; position:absolute; inset:0; background: rgba(0,0,0,0.68); z-index:1; }
+.about-bg-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
 .about-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 100px;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
+  padding: 28px 24px;
+  max-width: 780px;
+  margin: 0 auto;
 }
 .about-img-wrap {
   position: relative;
@@ -984,14 +991,14 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(201,168,76,0.15); }
 }
 .about-value-icon {
   width: 44px; height: 44px;
-  background: var(--gray-100);
+  background: rgba(255,255,255,0.12);
   border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
   font-size: 22px;
   flex-shrink: 0;
 }
-.about-value-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-.about-value-text { font-size: 13px; color: var(--gray-500); }
+.about-value-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: #fff; }
+.about-value-text { font-size: 13px; color: rgba(255,255,255,0.72); }
 
 /* ── CONTACT ── */
 #contact { padding: 100px 0; background: var(--gray-50); }
@@ -1172,8 +1179,6 @@ textarea.form-input { min-height: 120px; resize: vertical; }
   cursor: pointer;
   z-index: 1;
 }
-.modal-overlay { position: relative; }
-
 /* ── FOOTER ── */
 footer {
   background: #1a1a1a;
@@ -1354,7 +1359,6 @@ footer {
       <li><a href="#contact">تواصل</a></li>
     </ul>
     <div class="nav-actions">
-      <button class="lang-btn" onclick="toggleLang()">EN</button>
       <button class="hamburger" onclick="toggleMobileNav()" aria-label="قائمة">
         <span></span><span></span><span></span>
       </button>
@@ -1399,7 +1403,6 @@ footer {
     <div class="section-header reveal">
       <div>
         <div class="section-title">تسوّقي بالفئة</div>
-        <div class="section-sub">Shop By Category</div>
       </div>
     </div>
     <div style="position:relative">
@@ -1452,7 +1455,6 @@ footer {
     <div class="section-header reveal">
       <div>
         <div class="section-title">أحدث المنتجات</div>
-        <div class="section-sub">Latest Arrivals</div>
       </div>
     </div>
     <div class="products-filter reveal">
@@ -1495,42 +1497,22 @@ footer {
       </div>
     </div>
   </div>
-</div></div>
+</div>
 
 
 <!-- ════════════ ABOUT ════════════ -->
 <section id="about">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-img-wrap reveal">
-        <div class="about-img-main" style="padding:0">
-          <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&q=85" alt="Royal Way Store" style="width:100%;height:100%;object-fit:cover;border-radius:16px" onerror="this.style.display='none'">
-        </div>
-      </div>
-      <div class="reveal reveal-delay-2">
-        <div class="about-tag">✦ قصتنا | Our Story</div>
-        <h2 class="about-title">أفضل قطع Shein<br>تصلك على <em>بابك</em></h2>
-        <p class="about-text">
-          رويال واي ستور — متجرك المتخصص في أجمل القطع الموصى بها من Shein، مجرَّبة ومنتقاة بعناية لتناسب ذوقك وميزانيتك.
-        </p>
-        <p class="about-text">
-          لا تعب البحث والانتظار — نحن نختار لكِ الأفضل ونوصله لكِ مباشرة وبأسرع وقت.
-        </p>
+  <img class="about-bg-img" src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1400&q=85" alt="">
+  <div class="about-grid reveal">
+    <div class="about-tag" style="color:var(--gold-light)">✦ قصتنا</div>
+    <h2 class="about-title" style="color:#fff;margin-top:12px;text-shadow:0 2px 12px rgba(0,0,0,0.5)">أفضل قطع Shein<br>تصلك على <em>بابك</em></h2>
+    <p class="about-text" style="color:rgba(255,255,255,0.95);margin-top:16px;font-weight:500">
+      رويال واي ستور — متجرك المتخصص في أجمل القطع الموصى بها من Shein، مجرَّبة ومنتقاة بعناية لتناسب ذوقك وميزانيتك.
+    </p>
+    <p class="about-text" style="color:rgba(255,255,255,0.95);font-weight:500">
+      لا تعب البحث والانتظار — نحن نختار لكِ الأفضل ونوصله لكِ مباشرة وبأسرع وقت.
+    </p>
         <div class="about-values">
-          <div class="about-value">
-            <div class="about-value-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-            <div>
-              <div class="about-value-title">جودة لا تُضاهى</div>
-              <div class="about-value-text">خامات مختارة من أفضل دور الأزياء</div>
-            </div>
-          </div>
-          <div class="about-value">
-            <div class="about-value-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c96b8a" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-            <div>
-              <div class="about-value-title">موضة مستدامة</div>
-              <div class="about-value-text">ملتزمون بالتصنيع المسؤول بيئياً</div>
-            </div>
-          </div>
           <div class="about-value">
             <div class="about-value-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
             <div>
@@ -1546,8 +1528,6 @@ footer {
             </div>
           </div>
         </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -1557,7 +1537,6 @@ footer {
     <div class="section-header reveal" style="margin-bottom:60px;">
       <div>
         <div class="section-title">تواصلي معنا</div>
-        <div class="section-sub">Get In Touch</div>
       </div>
     </div>
     <div class="contact-grid">
@@ -1875,7 +1854,9 @@ let pendingOrderProductId = null;
 
 function renderProducts(filter = 'all') {
   const grid = document.getElementById('products-grid');
+  const section = document.getElementById('products-section');
   const filtered = filter === 'all' ? products : products.filter(p => p.cat === filter);
+  if (section) section.style.display = filtered.length === 0 && filter === 'all' && products.length === 0 ? 'none' : '';
   grid.innerHTML = filtered.map(p => `
     <div class="product-card reveal" onclick="openModal(${p.id})" style="animation-delay:${Math.random()*0.3}s">
       <div class="product-img-wrap">
@@ -1893,7 +1874,7 @@ function renderProducts(filter = 'all') {
       </div>
       <div class="product-info">
         <div class="product-category">${p.cat==='women'?'ملابس المرأة':p.cat==='men'?'ملابس الرجال':p.cat==='acc'?'إكسسوارات':'أطفال'}</div>
-        <div class="product-name">${currentLang==='ar'?p.name:p.nameEn}</div>
+        <div class="product-name">${p.name}</div>
         <div class="product-price-wrap">
           <div class="product-price">${p.price} ₪</div>
           ${p.oldPrice ? `<div class="product-price-old">${p.oldPrice} ₪</div>` : ''}
