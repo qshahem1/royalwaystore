@@ -386,6 +386,10 @@ textarea.form-input{min-height:80px;resize:vertical}
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       العروض والكاونتداون
     </div>
+    <div class="nav-item" onclick="showSection('categories',this)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      الأقسام
+    </div>
     <div class="nav-section-title">التخصيص</div>
     <div class="nav-item" onclick="showSection('notif',this)">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
@@ -563,6 +567,16 @@ textarea.form-input{min-height:80px;resize:vertical}
       </div>
     </div>
 
+    <!-- ════ CATEGORIES ════ -->
+    <div class="section" id="section-categories">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">إدارة الأقسام</div>
+        </div>
+        <div id="categories-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;padding:20px"></div>
+      </div>
+    </div>
+
     <!-- ════ NOTIFICATION ════ -->
     <div class="section" id="section-notif">
       <div class="card">
@@ -734,9 +748,17 @@ textarea.form-input{min-height:80px;resize:vertical}
           </select>
         </div>
         <div class="form-group full">
-          <label class="form-label">رابط الصورة</label>
-          <input class="form-input" id="p-img" placeholder="https://..." dir="ltr" oninput="previewImg(this.value)">
-          <div class="form-hint">انسخ رابط الصورة من Shein أو أي موقع آخر</div>
+          <label class="form-label">صورة المنتج</label>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <label style="display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--dark);padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              ارفع من الجهاز
+              <input type="file" accept="image/*" id="p-img-file" style="display:none" onchange="handleImgUpload(this)">
+            </label>
+            <span style="color:var(--text2);font-size:12px">أو</span>
+            <input class="form-input" id="p-img" placeholder="رابط صورة https://..." dir="ltr" oninput="previewImg(this.value)" style="flex:1;min-width:180px">
+          </div>
+          <input type="hidden" id="p-img-data">
         </div>
         <div class="form-group full">
           <div class="img-preview" id="img-preview-box">
@@ -856,13 +878,64 @@ function changePassword() {
   toast('تم تغيير كلمة المرور بنجاح','success');
 }
 
+// ════ CATEGORIES ════
+const DEFAULT_CATS = [
+  {id:'women', name:'ملابس المرأة', img:'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=200&q=80'},
+  {id:'men',   name:'ملابس الرجال', img:'https://images.unsplash.com/photo-1617137968427-85924c800a22?w=200&q=80'},
+  {id:'acc',   name:'إكسسوارات',    img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&q=80'},
+  {id:'kids',  name:'أطفال',        img:'https://images.unsplash.com/photo-1514090458221-65bb69cf63e6?w=200&q=80'},
+];
+let cats = getRWData('rw_categories', DEFAULT_CATS);
+
+function renderCategoriesAdmin() {
+  const list = document.getElementById('categories-list');
+  list.innerHTML = cats.map((c,i) => `
+    <div style="background:var(--bg);border-radius:14px;padding:16px;border:1px solid var(--border)">
+      <div style="text-align:center;margin-bottom:12px">
+        <img src="${c.img||''}" onerror="this.style.display='none'" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);display:${c.img?'inline-block':'none'}">
+      </div>
+      <div class="form-group" style="margin-bottom:10px">
+        <label class="form-label">اسم القسم</label>
+        <input class="form-input" value="${c.name}" onchange="cats[${i}].name=this.value">
+      </div>
+      <div class="form-group" style="margin-bottom:10px">
+        <label class="form-label">صورة القسم</label>
+        <label style="display:flex;align-items:center;gap:6px;background:var(--gold);color:var(--dark);padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:700;font-size:12px;margin-bottom:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          ارفع من الجهاز
+          <input type="file" accept="image/*" style="display:none" onchange="uploadCatImg(this,${i})">
+        </label>
+        <input class="form-input" placeholder="أو رابط صورة..." value="${c.img&&!c.img.startsWith('data:')?c.img:''}" oninput="cats[${i}].img=this.value" dir="ltr" style="font-size:11px">
+      </div>
+      <button onclick="saveCats()" style="width:100%;padding:9px;background:var(--gold);color:var(--dark);border-radius:8px;font-weight:700;font-size:13px">حفظ</button>
+    </div>
+  `).join('');
+}
+
+function uploadCatImg(input, i) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    cats[i].img = e.target.result;
+    renderCategoriesAdmin();
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveCats() {
+  setData('rw_categories', cats);
+  toast('تم حفظ الأقسام بنجاح', 'success');
+}
+
 // ════ NAVIGATION ════
 function showSection(id, el) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('section-'+id).classList.add('active');
   if (el) el.classList.add('active');
-  const titles = {overview:'نظرة عامة',products:'المنتجات',offers:'العروض والكاونتداون',notif:'شريط الإشعار',settings:'إعدادات المتجر',password:'تغيير كلمة المرور'};
+  if (id === 'categories') renderCategoriesAdmin();
+  const titles = {overview:'نظرة عامة',products:'المنتجات',categories:'الأقسام',offers:'العروض والكاونتداون',notif:'شريط الإشعار',settings:'إعدادات المتجر',password:'تغيير كلمة المرور'};
   document.getElementById('page-title').textContent = titles[id] || '';
 }
 
@@ -955,7 +1028,7 @@ function openProductModal(id) {
   } else {
     document.getElementById('product-modal-title').textContent = 'إضافة منتج جديد';
     document.getElementById('edit-id').value = '';
-    ['p-name','p-name-en','p-price','p-old-price','p-img','p-rating'].forEach(id=>document.getElementById(id).value='');
+    ['p-name','p-name-en','p-price','p-old-price','p-img','p-rating','p-img-data'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('p-cat').value='women';
     document.getElementById('p-badge').value='';
     document.getElementById('p-status').value='available';
@@ -978,7 +1051,7 @@ function saveProduct() {
     id: id ? parseInt(id) : Date.now(),
     name, nameEn: document.getElementById('p-name-en').value.trim(),
     cat: document.getElementById('p-cat').value,
-    img: document.getElementById('p-img').value.trim(),
+    img: document.getElementById('p-img-data').value || document.getElementById('p-img').value.trim(),
     price, oldPrice: parseFloat(document.getElementById('p-old-price').value)||null,
     badge: document.getElementById('p-badge').value||null,
     rating: parseFloat(document.getElementById('p-rating').value)||4.5,
@@ -1020,8 +1093,25 @@ function confirmDelete(id) {
 }
 function closeConfirm() { document.getElementById('confirm-overlay').classList.remove('open'); }
 
+// ── Image upload from device ──
+function handleImgUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const data = e.target.result;
+    document.getElementById('p-img-data').value = data;
+    document.getElementById('p-img').value = '';
+    const box = document.getElementById('img-preview-box');
+    box.classList.add('has-img');
+    box.innerHTML = `<img src="${data}">`;
+  };
+  reader.readAsDataURL(file);
+}
+
 // ── Image preview ──
 function previewImg(url) {
+  document.getElementById('p-img-data').value = '';
   const box = document.getElementById('img-preview-box');
   if (url) {
     box.classList.add('has-img');
