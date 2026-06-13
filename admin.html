@@ -1062,6 +1062,7 @@ function openProductModal(id) {
     document.getElementById('product-modal-title').textContent = 'إضافة منتج جديد';
     document.getElementById('edit-id').value = '';
     ['p-name','p-name-en','p-price','p-old-price','p-img','p-rating','p-img-data'].forEach(id=>document.getElementById(id).value='');
+    populateCatDropdown('');
     document.getElementById('p-badge').value='';
     document.getElementById('p-status').value='available';
     editingColors = ['#1a1a1a','#c9a84c'];
