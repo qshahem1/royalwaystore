@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Royal Way Store | قسم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,700;1,400;1,700&family=Tajawal:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #c9a84c;
+  --gold-light: #e8d49e;
+  --gold-dark: #9d7e2e;
+  --gold-glow: rgba(201,168,76,0.25);
+  --black: #1a1a1a;
+  --white: #ffffff;
+  --gray-50: #faf8f5;
+  --gray-100: #f2ede6;
+  --gray-200: #e8e0d5;
+  --gray-300: #d4c9b8;
+  --gray-500: #8a7d6a;
+  --gray-700: #4a4035;
+  --gray-900: #1a1a1a;
+  --font-ar: 'Tajawal', sans-serif;
+  --font-en: 'Inter', sans-serif;
+  --font-display: 'Cormorant Garamond', serif;
+  --nav-h: 80px;
+  --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-ar); background: #faf8f5; color: #1a1a1a; overflow-x: hidden; line-height: 1.7; }
+img { display: block; width: 100%; object-fit: cover; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+.container { max-width: 1300px; margin: 0 auto; padding: 0 24px; }
+
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); background: rgba(250,248,245,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(201,168,76,0.15); z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; transition: all 0.3s; }
+nav.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+.nav-logo { display: flex; align-items: center; gap: 12px; font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--gray-900); }
+.nav-logo img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(201,168,76,0.4); }
+.nav-logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 36px; }
+.nav-links a { font-size: 14px; font-weight: 500; color: var(--gray-700); transition: color 0.2s; }
+.nav-links a:hover { color: var(--gold); }
+
+/* HERO */
+.cat-hero {
+  margin-top: var(--nav-h);
+  height: 320px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--gray-900);
+}
+.cat-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.45;
+}
+.cat-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+}
+.cat-hero-back {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 30px;
+  padding: 8px 18px;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.cat-hero-back:hover { background: rgba(255,255,255,0.25); }
+.cat-hero-title {
+  font-family: var(--font-display);
+  font-size: 52px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+}
+.cat-hero-sub { font-size: 15px; color: rgba(255,255,255,0.75); letter-spacing: 1px; }
+
+/* PRODUCTS */
+.products-section { padding: 80px 0; }
+.section-header { text-align: center; margin-bottom: 48px; }
+.section-title { font-family: var(--font-display); font-size: 36px; font-weight: 700; color: var(--gray-900); }
+.section-sub { font-size: 13px; color: var(--gray-500); letter-spacing: 2px; margin-top: 8px; }
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+.product-card {
+  background: #ffffff;
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.product-card:hover { transform: translateY(-8px); box-shadow: 0 24px 60px rgba(201,168,76,0.2); border-color: rgba(201,168,76,0.6); }
+.product-img-wrap { position: relative; aspect-ratio: 1/1; overflow: hidden; background: var(--gray-100); border-radius: 16px 16px 0 0; }
+.product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
+.product-card:hover .product-img-wrap img { transform: scale(1.08); }
+.product-badge { position: absolute; top: 12px; right: 12px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.badge-sale { background: #e53935; color: white; }
+.badge-new { background: var(--gold); color: #0f0a04; }
+.badge-hot { background: #ff6f00; color: white; }
+.product-info { padding: 14px 14px 16px; }
+.product-name { font-size: 14px; font-weight: 600; color: var(--gray-900); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.product-cat-label { font-size: 11px; color: var(--gray-500); margin-bottom: 8px; }
+.product-price { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.price-new { font-size: 17px; font-weight: 700; color: var(--gray-900); }
+.price-old { font-size: 13px; color: var(--gray-500); text-decoration: line-through; }
+.product-actions { display: flex; gap: 8px; margin-top: 10px; }
+.btn-order { flex: 1; padding: 9px; background: var(--gold); color: #0f0a04; border-radius: 10px; font-size: 12px; font-weight: 700; font-family: var(--font-ar); transition: background 0.2s; }
+.btn-order:hover { background: var(--gold-dark); }
+
+.no-products { text-align: center; padding: 80px 24px; color: var(--gray-500); font-size: 16px; }
+
+/* PRODUCT PLACEHOLDER */
+.product-img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg,#1a0f0a,#2e1a0e); }
+
+/* ORDER MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 500; display: none; align-items: center; justify-content: center; padding: 24px; }
+.modal-overlay.open { display: flex; }
+.modal-box { background: #ffffff; border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; padding: 40px; max-width: 420px; width: 100%; position: relative; }
+.modal-close { position: absolute; top: 16px; left: 16px; width: 32px; height: 32px; border-radius: 50%; background: rgba(201,107,138,0.1); color: #c96b8a; font-size: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.modal-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.modal-sub { font-size: 13px; color: var(--gray-500); margin-bottom: 24px; }
+.form-input { width: 100%; padding: 12px 16px; border: 1.5px solid var(--gray-200); border-radius: 10px; font-family: var(--font-ar); font-size: 14px; background: var(--gray-50); color: var(--gray-900); outline: none; transition: border-color 0.2s; }
+.form-input:focus { border-color: var(--gold); }
+.form-label { font-size: 13px; font-weight: 500; color: var(--gray-700); display: block; margin-bottom: 6px; }
+.btn-wa { width: 100%; padding: 14px; background: #25D366; color: white; border-radius: 10px; font-family: var(--font-ar); font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 4px; cursor: pointer; transition: opacity 0.2s; }
+.btn-wa:hover { opacity: 0.88; }
+
+/* FOOTER */
+footer { background: var(--gray-900); color: #888; padding: 60px 0 0; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); margin-top: 40px; padding: 20px 0; text-align: center; font-size: 13px; }
+.footer-bottom span { color: var(--gold); }
+
+/* FLOAT */
+#wa-float { position: fixed; bottom: 24px; left: 32px; width: 52px; height: 52px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(37,211,102,0.4); z-index: 50; text-decoration: none; transition: transform 0.3s; }
+#wa-float:hover { transform: scale(1.1); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 600px) {
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
+  .cat-hero-title { font-size: 32px; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-links">
+    <a href="index.html#contact">تواصل</a>
+    <a href="index.html#about">من نحن</a>
+    <a href="index.html#products-section">المنتجات</a>
+    <a href="index.html">الرئيسية</a>
+  </div>
+  <a href="index.html" class="nav-logo">
+    <img src="https://i.imgur.com/placeholder.png" id="nav-logo-img" alt="Royal Way Store" onerror="this.style.display='none'">
+    <div>Royal <span>Way</span></div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<div class="cat-hero" id="cat-hero">
+  <img class="cat-hero-img" id="cat-hero-img" src="" alt="" onerror="this.style.display='none'">
+  <a href="index.html" class="cat-hero-back">← الرئيسية</a>
+  <div class="cat-hero-content">
+    <div class="cat-hero-title" id="cat-hero-title">...</div>
+    <div class="cat-hero-sub" id="cat-hero-sub"></div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products-section">
+  <div class="container">
+    <div id="products-grid" class="products-grid"></div>
+    <div id="no-products" class="no-products" style="display:none">لا توجد منتجات في هذا القسم حالياً</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-bottom">
+      © 2026 <span>Royal Way Store</span> — جميع الحقوق محفوظة
+    </div>
+  </div>
+</footer>
+
+<!-- WA FLOAT -->
+<a href="" id="wa-float" target="_blank">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
+
+<!-- ORDER MODAL -->
+<div class="modal-overlay" id="order-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">أكملي طلبك</div>
+    <div class="modal-sub">سيُرسل طلبك مباشرة على واتساب</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div>
+        <label class="form-label">الاسم</label>
+        <input class="form-input" id="order-name" type="text" placeholder="اسمك الكريم">
+      </div>
+      <div>
+        <label class="form-label">رقم الجوال</label>
+        <input class="form-input" id="order-phone" type="tel" placeholder="05xxxxxxxx" dir="ltr">
+      </div>
+      <button class="btn-wa" onclick="confirmOrder()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        إرسال الطلب على واتساب
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+function getRWData(key, def) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e) { return def; } }
+function getWA() { return getRWData('rw_settings', {wa:'972593997054'}).wa || '972593997054'; }
+
+const DEFAULT_CATS = [
+  {id:'women',   active:true,  name:'ملابس المرأة',    img:'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=800&q=85'},
+  {id:'men',     active:true,  name:'ملابس الرجال',    img:'https://images.unsplash.com/photo-1617137968427-85924c800a22?w=800&q=85'},
+  {id:'acc',     active:true,  name:'إكسسوارات',       img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=85'},
+  {id:'kids',    active:true,  name:'أطفال',           img:'https://images.unsplash.com/photo-1514090458221-65bb69cf63e6?w=800&q=85'},
+  {id:'beauty',  active:false, name:'مكياج وعناية',    img:'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=85'},
+  {id:'shoes',   active:false, name:'أحذية',           img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=85'},
+  {id:'bags',    active:false, name:'حقائب',           img:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&q=85'},
+  {id:'watches', active:false, name:'ساعات',           img:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=85'},
+  {id:'jewelry', active:false, name:'مجوهرات',         img:'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=85'},
+  {id:'perfume', active:false, name:'عطور',            img:'https://images.unsplash.com/photo-1541643600914-78b084683702?w=800&q=85'},
+  {id:'sports',  active:false, name:'رياضة ولياقة',    img:'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=85'},
+  {id:'home',    active:false, name:'منزل وديكور',     img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=85'},
+  {id:'tech',    active:false, name:'إلكترونيات',      img:'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=800&q=85'},
+  {id:'health',  active:false, name:'صحة وعافية',      img:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=85'},
+  {id:'suncare', active:false, name:'عناية بالشعر',    img:'https://images.unsplash.com/photo-1526045612212-70caf35c14df?w=800&q=85'},
+  {id:'lingerie',active:false, name:'ملابس داخلية',    img:'https://images.unsplash.com/photo-1594938298603-c8148c4b3691?w=800&q=85'},
+  {id:'swim',    active:false, name:'ملابس سباحة',     img:'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&q=85'},
+  {id:'winter',  active:false, name:'ملابس شتوية',     img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=85'},
+  {id:'toys',    active:false, name:'ألعاب أطفال',     img:'https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=800&q=85'},
+  {id:'school',  active:false, name:'مستلزمات مدرسية', img:'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=85'},
+];
+
+const DEFAULT_PRODUCTS = [
+  {id:1,name:'عباءة الأناقة الكلاسيك',nameEn:'Classic Elegance Abaya',cat:'women',img:'',price:280,oldPrice:400,badge:'sale',status:'available'},
+  {id:2,name:'فستان السهرة الذهبي',nameEn:'Golden Evening Dress',cat:'women',img:'',price:520,oldPrice:null,badge:'new',status:'available'},
+  {id:3,name:'قميص الرجال الكتان',nameEn:'Men\'s Linen Shirt',cat:'men',img:'',price:185,oldPrice:220,badge:null,status:'available'},
+  {id:4,name:'حقيبة يد فاخرة',nameEn:'Luxury Handbag',cat:'acc',img:'',price:650,oldPrice:900,badge:'hot',status:'available'},
+  {id:5,name:'فستان الأطفال المزهر',nameEn:'Kids Floral Dress',cat:'kids',img:'',price:120,oldPrice:160,badge:'sale',status:'available'},
+  {id:6,name:'بدلة رجالية كلاسيك',nameEn:'Classic Men\'s Suit',cat:'men',img:'',price:890,oldPrice:null,badge:'new',status:'available'},
+  {id:7,name:'شال الكشمير الفاخر',nameEn:'Luxury Cashmere Shawl',cat:'acc',img:'',price:340,oldPrice:480,badge:'hot',status:'available'},
+  {id:8,name:'تنورة الباليه الأنيقة',nameEn:'Elegant Ballet Skirt',cat:'women',img:'',price:210,oldPrice:280,badge:null,status:'available'},
+];
+
+// Read URL param
+const catId = new URLSearchParams(location.search).get('cat') || 'women';
+
+// Load cats & products
+const savedCats = getRWData('rw_categories', null);
+const allCats = savedCats
+  ? DEFAULT_CATS.map(def => { const s = savedCats.find(x=>x.id===def.id); return s ? {...def,...s, active:(s.active!==undefined?s.active:def.active)} : def; })
+  : DEFAULT_CATS;
+const cat = allCats.find(c => c.id === catId) || DEFAULT_CATS.find(c => c.id === catId) || {name: catId, img: ''};
+
+const products = getRWData('rw_products', DEFAULT_PRODUCTS).filter(p => p.status !== 'unavailable' && p.cat === catId);
+
+// Set page title
+document.title = `Royal Way Store | ${cat.name}`;
+
+// Hero
+document.getElementById('cat-hero-title').textContent = cat.name;
+if (cat.img) {
+  const img = document.getElementById('cat-hero-img');
+  img.src = cat.img;
+  img.style.display = 'block';
+}
+
+// WA float
+document.getElementById('wa-float').href = `https://wa.me/${getWA()}`;
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// Render products
+let orderProduct = null;
+function renderProducts() {
+  const grid = document.getElementById('products-grid');
+  const noP = document.getElementById('no-products');
+  if (!products.length) { noP.style.display = ''; grid.style.display = 'none'; return; }
+
+  const badgeMap = { sale:'badge-sale تخفيض', new:'badge-new جديد', hot:'badge-hot رائج' };
+  grid.innerHTML = products.map(p => `
+    <div class="product-card" onclick="openOrder(${p.id})">
+      <div class="product-img-wrap">
+        ${p.img
+          ? `<img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=product-img-placeholder><svg width=60 height=80 viewBox=\'0 0 60 80\' fill=none stroke=\'#c9a84c\' stroke-width=1.2><path d=\'M30 5c-6 0-10 4-10 8l-12 20h8v40h28V33h8L40 13c0-4-4-8-10-8z\'/></svg></div>'">`
+          : `<div class="product-img-placeholder"><svg width="60" height="80" viewBox="0 0 60 80" fill="none" stroke="#c9a84c" stroke-width="1.2"><path d="M30 5c-6 0-10 4-10 8l-12 20h8v40h28V33h8L40 13c0-4-4-8-10-8z"/></svg></div>`
+        }
+        ${p.badge ? `<div class="product-badge ${badgeMap[p.badge]?.split(' ')[0]}">${badgeMap[p.badge]?.split(' ')[1]||''}</div>` : ''}
+      </div>
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-price">
+          <span class="price-new">${p.price} ₪</span>
+          ${p.oldPrice ? `<span class="price-old">${p.oldPrice} ₪</span>` : ''}
+        </div>
+        <div class="product-actions">
+          <button class="btn-order" onclick="event.stopPropagation();openOrder(${p.id})">اطلبي الآن ←</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openOrder(id) {
+  orderProduct = products.find(p => p.id === id);
+  const saved = getRWData('rw_order_info', {});
+  document.getElementById('order-name').value = saved.name || '';
+  document.getElementById('order-phone').value = saved.phone || '';
+  document.getElementById('order-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('order-modal').classList.remove('open');
+}
+
+function confirmOrder() {
+  const name = document.getElementById('order-name').value.trim();
+  const phone = document.getElementById('order-phone').value.trim();
+  if (!name || !phone) { alert('الرجاء إدخال الاسم ورقم الجوال'); return; }
+  localStorage.setItem('rw_order_info', JSON.stringify({name, phone}));
+  const wa = getWA();
+  const msg = `مرحباً، أريد الطلب:\n\n*${orderProduct?.name || ''}*\nالسعر: ${orderProduct?.price || ''} ₪\n\nالاسم: ${name}\nالجوال: ${phone}`;
+  window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, '_blank');
+  closeModal();
+}
+
+renderProducts();
+</script>
+</body>
+</html>

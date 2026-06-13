@@ -1851,7 +1851,7 @@ function renderCategories() {
   const finalCats = cats.length > 0 ? cats : DEFAULT_CATS.filter(c => c.active === true);
   const grid = document.getElementById('cats-grid');
   grid.innerHTML = finalCats.map(c => `
-    <div class="cat-card" onclick="document.getElementById('products-section').scrollIntoView({behavior:'smooth'});setTimeout(()=>filterProducts('${c.id}'),400)">
+    <div class="cat-card" onclick="location.href='category.html?cat=${c.id}'">
       <div class="cat-circle">
         ${c.img ? `<img src="${c.img}" alt="${c.name}" onerror="this.style.display='none'">` : ''}
       </div>
