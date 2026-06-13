@@ -527,7 +527,8 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(201,168,76,0.15); }
   overflow-x: auto;
   padding-bottom: 12px;
   scrollbar-width: none;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-right: 8px;
 }
 .categories-grid::-webkit-scrollbar { display: none; }
 .cat-card {
@@ -1401,7 +1402,11 @@ footer {
         <div class="section-sub">Shop By Category</div>
       </div>
     </div>
-    <div class="categories-grid reveal" id="cats-grid"></div>
+    <div style="position:relative">
+      <button onclick="scrollCats(-1)" style="position:absolute;right:-20px;top:50%;transform:translateY(-50%);z-index:5;width:40px;height:40px;border-radius:50%;background:white;border:1.5px solid rgba(201,168,76,0.4);box-shadow:0 4px 12px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='var(--gold)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='inherit'">‹</button>
+      <button onclick="scrollCats(1)" style="position:absolute;left:-20px;top:50%;transform:translateY(-50%);z-index:5;width:40px;height:40px;border-radius:50%;background:white;border:1.5px solid rgba(201,168,76,0.4);box-shadow:0 4px 12px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='var(--gold)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='inherit'">›</button>
+      <div class="categories-grid reveal" id="cats-grid"></div>
+    </div>
   </div>
 </section>
 
@@ -1803,6 +1808,16 @@ const DEFAULT_PRODUCTS = [
 ];
 function getRWData(key, def) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e) { return def; } }
 
+// إذا الأقسام المحفوظة كلها معطلة = بيانات قديمة/خربانة → امسحها تا ترجع للافتراضي
+(function migrateCats() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('rw_categories'));
+    if (saved && Array.isArray(saved) && saved.every(c => c.active === false || c.active === undefined)) {
+      localStorage.removeItem('rw_categories');
+    }
+  } catch(e) { localStorage.removeItem('rw_categories'); }
+})();
+
 function renderCategories() {
   const DEFAULT_CATS = [
     {id:'women',   active:true,  name:'ملابس المرأة',    img:'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=200&q=80'},
@@ -1826,23 +1841,23 @@ function renderCategories() {
     {id:'toys',    active:false, name:'ألعاب أطفال',     img:'https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=200&q=80'},
     {id:'school',  active:false, name:'مستلزمات مدرسية', img:'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=200&q=80'},
   ];
-  const cats = getRWData('rw_categories', DEFAULT_CATS).filter(c => c.active !== false);
+  const saved = getRWData('rw_categories', null);
+  const merged = DEFAULT_CATS.map(def => {
+    const s = saved ? saved.find(x => x.id === def.id) : null;
+    const active = (s && typeof s.active === 'boolean') ? s.active : def.active;
+    return { ...def, ...(s || {}), active };
+  });
+  const cats = merged.filter(c => c.active === true);
+  const finalCats = cats.length > 0 ? cats : DEFAULT_CATS.filter(c => c.active === true);
   const grid = document.getElementById('cats-grid');
-  grid.innerHTML = cats.map(c => `
-    <div class="cat-card" onclick="filterProducts('${c.id}')">
+  grid.innerHTML = finalCats.map(c => `
+    <div class="cat-card" onclick="document.getElementById('products-section').scrollIntoView({behavior:'smooth'});setTimeout(()=>filterProducts('${c.id}'),400)">
       <div class="cat-circle">
         ${c.img ? `<img src="${c.img}" alt="${c.name}" onerror="this.style.display='none'">` : ''}
       </div>
       <div class="cat-card-name">${c.name}</div>
     </div>
-  `).join('') + `
-    <div class="cat-card" onclick="filterProducts('all')">
-      <div class="cat-circle" style="background:linear-gradient(135deg,var(--gold-light),var(--gold));display:flex;align-items:center;justify-content:center;">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      </div>
-      <div class="cat-card-name">الكل</div>
-    </div>
-  `;
+  `).join('');
 }
 let products = getRWData('rw_products', DEFAULT_PRODUCTS).filter(p => p.status !== 'unavailable');
 
@@ -2100,6 +2115,11 @@ function applyNotifBar() {
   bar.style.display = '';
   const textNode = bar.childNodes[0];
   if (textNode && textNode.nodeType === 3) textNode.nodeValue = '\n  ' + notif.text + '\n  ';
+}
+
+function scrollCats(dir) {
+  const grid = document.getElementById('cats-grid');
+  grid.scrollBy({ left: dir * -280, behavior: 'smooth' });
 }
 
 function observeReveal() {
