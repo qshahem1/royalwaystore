@@ -1620,11 +1620,6 @@ footer {
 <body>
 
 <!-- PRELOADER -->
-<div id="preloader">
-  <img src="logo.svg" alt="Royal Way Store" style="width:160px; margin-bottom:32px; filter:drop-shadow(0 4px 20px rgba(201,168,76,0.4));" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-  <div class="preloader-logo" style="display:none">ROYAL <span>WAY</span></div>
-  <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
-</div>
 
 <!-- NOTIFICATION BAR -->
 <div id="notif-bar" style="background:linear-gradient(90deg,#9d7e2e,#c9a84c,#9d7e2e); color:#0f0a04; text-align:center; padding:10px 40px; font-size:13px; font-weight:600; letter-spacing:0.5px; position:relative;">
@@ -2648,9 +2643,6 @@ document.addEventListener('keydown', e => {
 });
 
 window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('preloader').classList.add('hidden');
-  }, 2000);
   applyNotifBar();
   renderCategories();
   renderBestSellers();
