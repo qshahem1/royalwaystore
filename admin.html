@@ -543,6 +543,18 @@ textarea.form-input{min-height:80px;resize:vertical}
                 <label class="form-label">تاريخ انتهاء العرض</label>
                 <input class="form-input" id="offer-end" type="datetime-local" onchange="saveOffer();updateOfferPreview()">
               </div>
+              <div class="form-group" style="margin-bottom:14px">
+                <label class="form-label">صورة العرض</label>
+                <div id="offer-img-preview-box" class="img-upload-box" onclick="document.getElementById('offer-img-file').click()" style="height:140px;cursor:pointer;display:flex;align-items:center;justify-content:center;border:2px dashed var(--gold-light);border-radius:12px;overflow:hidden;background:#1a1208;position:relative">
+                  <span style="color:#888;font-size:13px;text-align:center">اضغط لرفع صورة العرض<br><span style="font-size:11px;color:#555">أو اتركها فارغة لإظهار الخلفية الافتراضية</span></span>
+                </div>
+                <input type="file" id="offer-img-file" accept="image/*" style="display:none" onchange="handleOfferImgUpload(this)">
+                <input type="hidden" id="offer-img-data">
+                <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+                  <input class="form-input" id="offer-img-url" placeholder="أو أدخل رابط صورة (URL)" oninput="saveOffer();updateOfferImgPreview()" style="flex:1;font-size:12px">
+                  <button class="btn btn-outline" onclick="clearOfferImg()" style="white-space:nowrap;font-size:12px;padding:8px 12px">مسح الصورة</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -828,7 +840,7 @@ const DEFAULT_PRODUCTS = [
   {id:7,name:'شال الكشمير الفاخر',nameEn:'Luxury Cashmere Shawl',cat:'acc',img:'',price:340,oldPrice:480,badge:'hot',rating:4.9,reviews:92,colors:['#c9a84c','#8B0000','#2c3e50'],status:'available'},
   {id:8,name:'تنورة الباليه الأنيقة',nameEn:'Elegant Ballet Skirt',cat:'women',img:'',price:210,oldPrice:280,badge:null,rating:4.6,reviews:55,colors:['#ffb6c1','#fff','#1a1a1a'],status:'available'},
 ];
-const DEFAULT_OFFER = {active:true,title:'عيد الأم',discount:50,desc:'على جميع الفساتين والعبايات الفاخرة',end:''};
+const DEFAULT_OFFER = {active:true,title:'عيد الأم',discount:50,desc:'على جميع الفساتين والعبايات الفاخرة',end:'',img:''};
 const DEFAULT_NOTIF = {visible:true,text:'✦ توصيل سريع لجنين 10₪ · الضفة 20₪ · الداخل والقدس 70₪ — تواصل معنا على واتساب الآن ✦'};
 const DEFAULT_SETTINGS = {wa:'972593997054',insta:'https://www.instagram.com/royal_way0',fb:'https://www.facebook.com/share/1APfCRMFmu/',loc1name:'سوبر ماركت سعيد',loc1area:'دوار السينما',loc2name:'مكتب الرويال',loc2area:'شارع حيفا',d1:10,d2:20,d3:70};
 
@@ -1144,18 +1156,62 @@ function loadOffer() {
   document.getElementById('offer-discount').value = offer.discount||50;
   document.getElementById('offer-desc').value = offer.desc||'';
   document.getElementById('offer-end').value = offer.end||'';
+  if (offer.img) {
+    document.getElementById('offer-img-data').value = offer.img.startsWith('data:') ? offer.img : '';
+    if (offer.img.startsWith('data:')) {
+      updateOfferImgPreviewBox(offer.img);
+    } else {
+      document.getElementById('offer-img-url').value = offer.img;
+      updateOfferImgPreviewBox(offer.img);
+    }
+  }
   updateOfferPreview();
 }
 function saveOffer() {
+  const imgData = document.getElementById('offer-img-data').value;
+  const imgUrl = document.getElementById('offer-img-url').value.trim();
   offer = {
     active: document.getElementById('offer-active').checked,
     title: document.getElementById('offer-title').value,
     discount: parseInt(document.getElementById('offer-discount').value)||50,
     desc: document.getElementById('offer-desc').value,
     end: document.getElementById('offer-end').value,
+    img: imgData || imgUrl || '',
   };
   setData('rw_offer', offer);
   updateOverview();
+}
+function handleOfferImgUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const data = e.target.result;
+    document.getElementById('offer-img-data').value = data;
+    document.getElementById('offer-img-url').value = '';
+    updateOfferImgPreviewBox(data);
+    saveOffer();
+  };
+  reader.readAsDataURL(file);
+}
+function updateOfferImgPreview() {
+  const url = document.getElementById('offer-img-url').value.trim();
+  if (url) {
+    document.getElementById('offer-img-data').value = '';
+    updateOfferImgPreviewBox(url);
+  }
+  saveOffer();
+}
+function updateOfferImgPreviewBox(src) {
+  const box = document.getElementById('offer-img-preview-box');
+  box.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover">`;
+}
+function clearOfferImg() {
+  document.getElementById('offer-img-data').value = '';
+  document.getElementById('offer-img-url').value = '';
+  document.getElementById('offer-img-file').value = '';
+  document.getElementById('offer-img-preview-box').innerHTML = '<span style="color:#888;font-size:13px;text-align:center">اضغط لرفع صورة العرض<br><span style=\'font-size:11px;color:#555\'>أو اتركها فارغة لإظهار الخلفية الافتراضية</span></span>';
+  saveOffer();
 }
 function updateOfferPreview() {
   const title = document.getElementById('offer-title').value || 'عيد الأم';

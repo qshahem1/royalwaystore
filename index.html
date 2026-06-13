@@ -1433,9 +1433,9 @@ footer {
         تسوقي العرض ←
       </button>
     </div>
-    <div class="countdown-visual reveal reveal-delay-2">
-      <div class="img-placeholder fashion" style="height:100%; background: linear-gradient(135deg,#200c16,#3d1a2e); display:flex; align-items:center; justify-content:center;"><svg width="80" height="110" viewBox="0 0 60 80" fill="none" stroke="#c96b8a" stroke-width="1.2" opacity="0.8"><path d="M30 5c-6 0-10 4-10 8l-12 20h8v40h28V33h8L40 13c0-4-4-8-10-8z"/><line x1="30" y1="5" x2="30" y2="13"/></svg></div>
-      <div class="countdown-offer-badge">-50%</div>
+    <div class="countdown-visual reveal reveal-delay-2" id="countdown-visual">
+      <div id="countdown-visual-inner" style="height:100%; background: linear-gradient(135deg,#200c16,#3d1a2e); display:flex; align-items:center; justify-content:center;"><svg width="80" height="110" viewBox="0 0 60 80" fill="none" stroke="#c96b8a" stroke-width="1.2" opacity="0.8"><path d="M30 5c-6 0-10 4-10 8l-12 20h8v40h28V33h8L40 13c0-4-4-8-10-8z"/><line x1="30" y1="5" x2="30" y2="13"/></svg></div>
+      <div class="countdown-offer-badge" id="countdown-badge">-50%</div>
     </div>
   </div>
 </div>
@@ -1462,13 +1462,7 @@ footer {
 </section>
 
 <!-- ════════════ SHEIN BANNER ════════════ -->
-<div class="brands-section">
-  <div class="container">
-    <div style="text-align:center; margin-bottom:32px;">
-      <div style="font-size:13px; letter-spacing:3px; text-transform:uppercase; color:var(--gray-500); margin-bottom:8px;">متخصصون في قطع</div>
-      <div style="font-family:var(--font-display); font-size:36px; font-weight:700; color:var(--gray-900)">SHEIN</div>
-    </div>
-    <div class="brands-grid reveal">
+<div style="display:none"><div class="brands-grid reveal">
       <div style="text-align:center;">
         <div style="width:48px;height:48px;border:1px solid rgba(201,107,138,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;background:rgba(201,107,138,0.08)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c96b8a" stroke-width="1.5"><path d="M12 2l5 4v14H7V6z"/><path d="M7 6L3 9l2 4 2-2"/><path d="M17 6l4 3-2 4-2-2"/></svg></div>
         <div style="font-size:13px; font-weight:600; color:var(--gray-700)">أزياء نسائية</div>
@@ -1495,7 +1489,7 @@ footer {
       </div>
     </div>
   </div>
-</div>
+</div></div>
 
 
 <!-- ════════════ ABOUT ════════════ -->
@@ -1503,12 +1497,8 @@ footer {
   <div class="container">
     <div class="about-grid">
       <div class="about-img-wrap reveal">
-        <div class="about-img-main">
-          <svg width="100" height="100" viewBox="0 0 100 100" fill="none"><path d="M50 10L65 35H90L70 55L78 80L50 65L22 80L30 55L10 35H35Z" stroke="#c9a84c" stroke-width="1.5" fill="none"/><circle cx="50" cy="50" r="15" stroke="#c96b8a" stroke-width="1" fill="none"/></svg>
-        </div>
-        <div class="about-img-accent">
-          <div class="about-img-accent-num">4+</div>
-          <div class="about-img-accent-label">سنوات خبرة</div>
+        <div class="about-img-main" style="padding:0">
+          <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&q=85" alt="Royal Way Store" style="width:100%;height:100%;object-fit:cover;border-radius:16px" onerror="this.style.display='none'">
         </div>
       </div>
       <div class="reveal reveal-delay-2">
@@ -1556,7 +1546,7 @@ footer {
 </section>
 
 <!-- ════════════ CONTACT ════════════ -->
-<section id="contact">
+<section id="contact" style="display:none">
   <div class="container">
     <div class="section-header reveal" style="margin-bottom:60px;">
       <div>
@@ -2060,8 +2050,14 @@ function startCountdown() {
   if (titleEl) titleEl.innerHTML = `${offer.title}<br>خصم حتى <span style="color:var(--gold)">${offer.discount}%</span>`;
   const descEl = document.querySelector('.countdown-desc');
   if (descEl) descEl.textContent = offer.desc || '';
-  const badgeEl = document.querySelector('.countdown-offer-badge');
+  const badgeEl = document.getElementById('countdown-badge');
   if (badgeEl) badgeEl.textContent = `-${offer.discount}%`;
+
+  // show offer image if set
+  if (offer.img) {
+    const inner = document.getElementById('countdown-visual-inner');
+    if (inner) inner.innerHTML = `<img src="${offer.img}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">`;
+  }
 
   let end;
   if (offer.end) {
