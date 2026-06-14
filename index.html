@@ -27,7 +27,7 @@
   --font-ar: 'Tajawal', sans-serif;
   --font-en: 'Inter', sans-serif;
   --font-display: 'Cormorant Garamond', serif;
-  --nav-h: 80px;
+  --nav-h: 100px;
   --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -226,9 +226,9 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(201,168,76,0.15); }
   gap: 36px;
 }
 .nav-links a {
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 1px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
   color: var(--gray-700);
   position: relative;
@@ -354,6 +354,30 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(201,168,76,0.15); }
   text-align: center; padding: 40px 20px;
   color: var(--gray-500);
   font-size: 14px;
+}
+/* MARQUEE */
+.marquee {
+  background: linear-gradient(90deg, #1a1a1a 0%, #2a2218 50%, #1a1a1a 100%);
+  color: var(--gold-light);
+  padding: 14px 0;
+  overflow: hidden;
+  border-top: 1px solid rgba(201,168,76,0.25);
+  border-bottom: 1px solid rgba(201,168,76,0.25);
+}
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee 35s linear infinite;
+  gap: 56px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.marquee-track span { display: inline-block; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(50%); }
 }
 /* CART */
 .cart-badge {
@@ -679,6 +703,23 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(201,168,76,0.15); }
   animation: slideIn 0.7s ease;
 }
 .slide-content.active { display: flex; }
+.slide-content.active .hero-brand { animation: fadeUp 0.5s 0.05s both; }
+.slide-content.active .hero-title { animation: fadeUp 0.7s 0.2s both; }
+.slide-content.active .hero-desc { animation: fadeUp 0.7s 0.5s both; }
+.slide-content.active .hero-actions { animation: fadeUp 0.7s 0.75s both; }
+.hero-title .word {
+  display: inline-block;
+  animation: wordIn 0.6s var(--ease) both;
+  opacity: 0;
+}
+@keyframes wordIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 @keyframes slideIn {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -836,22 +877,33 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(201,168,76,0.15); }
   overflow: hidden;
   border: 2.5px solid transparent;
   background: var(--gray-100);
-  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  transition: all 0.4s var(--ease);
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+.cat-circle::after {
+  content: '';
+  position: absolute; inset: -4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--pink), var(--gold));
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s;
 }
 .cat-card:hover .cat-circle {
   border-color: var(--gold);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(201,168,76,0.25);
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 14px 36px rgba(201,168,76,0.4);
 }
+.cat-card:hover .cat-circle::after { opacity: 0.6; }
 .cat-circle img {
   width: 100%; height: 100%;
   object-fit: cover;
-  transition: transform 0.4s;
+  transition: transform 0.5s var(--ease);
 }
-.cat-card:hover .cat-circle img { transform: scale(1.08); }
+.cat-card:hover .cat-circle img { transform: scale(1.15); }
 .cat-card-name {
   font-size: 13px;
   font-weight: 600;
@@ -1014,7 +1066,19 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(201,168,76,0.15); }
   display: flex; align-items: center; justify-content: center;
   font-size: 60px;
   background: #f5f0e8;
+  transition: transform 0.6s var(--ease);
 }
+.product-card:hover .product-img-placeholder { transform: scale(1.08); }
+.product-img-placeholder img { transition: transform 0.6s var(--ease) !important; }
+.product-card:hover .product-img-placeholder img { transform: scale(1.05); }
+.product-img-wrap::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.25), transparent 50%);
+  opacity: 0; transition: opacity 0.35s;
+  pointer-events: none;
+}
+.product-card:hover .product-img-wrap::after { opacity: 1; }
 .product-badges {
   position: absolute;
   top: 16px; right: 16px;
@@ -1030,6 +1094,29 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(201,168,76,0.15); }
   text-transform: uppercase;
   border-radius: 4px;
 }
+.soldout-overlay {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-8deg);
+  background: rgba(229,57,53,0.95);
+  color: #fff;
+  padding: 8px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  border-radius: 6px;
+  z-index: 3;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.product-card.is-soldout { opacity: 0.85; }
+.product-card.is-soldout .product-img-placeholder { filter: grayscale(0.6); }
+.product-card.is-soldout .add-to-cart-btn {
+  background: var(--gray-200) !important;
+  color: var(--gray-500) !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+}
+.product-card.is-soldout:hover .product-img-placeholder { transform: none; }
 .badge-new { background: var(--pink-dark); color: var(--white); }
 .badge-sale { background: #e53935; color: var(--white); }
 .badge-hot { background: var(--gold); color: var(--white); }
@@ -1477,7 +1564,7 @@ footer {
 }
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
   gap: 60px;
   margin-bottom: 60px;
 }
@@ -1528,6 +1615,63 @@ footer {
   color: #666;
 }
 .footer-bottom span { color: var(--gold); }
+
+/* ── NEWSLETTER ── */
+.newsletter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+  padding: 28px 0;
+  margin: 32px 0 0;
+  border-top: 1px solid rgba(201,168,76,0.15);
+  border-bottom: 1px solid rgba(201,168,76,0.15);
+  flex-wrap: wrap;
+}
+.newsletter-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: #faf8f5;
+  margin-bottom: 4px;
+}
+.newsletter-desc { font-size: 13px; color: #888; }
+.newsletter-form {
+  display: flex;
+  gap: 10px;
+  min-width: 320px;
+  flex: 1;
+  max-width: 460px;
+}
+.newsletter-input {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(201,168,76,0.25);
+  color: #fff;
+  padding: 13px 18px;
+  border-radius: 10px;
+  font-family: var(--font-ar);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  direction: ltr;
+}
+.newsletter-input::placeholder { color: rgba(255,255,255,0.4); text-align: right; }
+.newsletter-input:focus { border-color: var(--gold); background: rgba(255,255,255,0.08); }
+.newsletter-btn {
+  background: var(--gold);
+  color: #1a1a1a;
+  border: none;
+  padding: 13px 24px;
+  border-radius: 10px;
+  font-family: var(--font-ar);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.newsletter-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
 
 /* ── BACK TO TOP ── */
 .back-top {
@@ -1614,6 +1758,60 @@ footer {
   .container { padding: 0 14px; }
   .btn { padding: 12px 22px; font-size: 13px; }
   .notif-bar, #notif-bar { font-size: 11px; padding: 8px 32px; }
+
+  /* Hero on mobile */
+  .hero-title { font-size: 32px !important; line-height: 1.15 !important; }
+  .hero-desc { font-size: 14px; }
+  .hero-brand { font-size: 11px; letter-spacing: 3px; }
+  .hero-dots { bottom: 18px; }
+
+  /* Marquee */
+  .marquee-track { font-size: 12px; gap: 36px; animation-duration: 28s; }
+
+  /* Nav icons */
+  .nav-icon-btn { width: 36px; height: 36px; }
+  .nav-icon-btn svg { width: 17px; height: 17px; }
+  .nav-actions { gap: 8px; }
+  .nav-logo img { height: 48px !important; }
+
+  /* Cart drawer fullscreen */
+  .cart-drawer { max-width: 100%; }
+  .cart-item-img { width: 60px; height: 80px; }
+  .cart-item-name { font-size: 13px; }
+
+  /* Search overlay */
+  #search-overlay { padding: 60px 14px 14px; }
+  .search-box { padding: 20px; }
+  .search-results { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .search-result-img { height: 110px; }
+
+  /* Newsletter stack */
+  .newsletter-row { flex-direction: column; align-items: stretch; text-align: center; }
+  .newsletter-form { min-width: 0; max-width: 100%; }
+  .newsletter-title { font-size: 18px; }
+
+  /* Categories scroll arrows hide */
+  .cat-scroll-btn { display: none !important; }
+
+  /* About on mobile */
+  .about-title { font-size: 26px !important; }
+  .about-text { font-size: 13px !important; }
+
+  /* Best sellers tighter */
+  .bestsellers-section { padding: 50px 0 !important; }
+  .products-section { padding: 60px 0 !important; }
+
+  /* Section spacing */
+  #products { padding: 60px 0 !important; }
+  #about { min-height: auto !important; }
+  .about-grid { padding: 32px 18px !important; }
+
+  /* Float buttons smaller */
+  #wa-float { width: 46px !important; height: 46px !important; bottom: 16px !important; left: 16px !important; }
+  #wa-float svg { width: 22px !important; height: 22px !important; }
+
+  /* Policy modal padding */
+  #policy-overlay > div { padding: 24px 20px !important; }
 }
 </style>
 </head>
@@ -1633,7 +1831,7 @@ footer {
 <nav id="main-nav">
   <div class="container nav-inner">
     <a class="nav-logo" href="#home">
-      <img src="logo.svg" alt="Royal Way Store" style="height:68px; width:auto; filter:drop-shadow(0 2px 8px rgba(201,168,76,0.3));" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
+      <img src="logo.svg" alt="Royal Way Store" style="height:90px; width:auto; filter:drop-shadow(0 2px 8px rgba(201,168,76,0.3));" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
       <span style="display:none">ROYAL <span style="color:var(--gold)">WAY</span></span>
     </a>
     <ul class="nav-links">
@@ -1719,6 +1917,24 @@ footer {
 </section>
 
 
+<!-- ════════════ MARQUEE ════════════ -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>✦ توصيل سريع لكل فلسطين</span>
+    <span>✦ أزياء Shein الأصلية</span>
+    <span>✦ الدفع عند الاستلام</span>
+    <span>✦ تواصل مباشر على واتساب</span>
+    <span>✦ أسعار منافسة</span>
+    <span>✦ منتقاة بعناية</span>
+    <span>✦ توصيل سريع لكل فلسطين</span>
+    <span>✦ أزياء Shein الأصلية</span>
+    <span>✦ الدفع عند الاستلام</span>
+    <span>✦ تواصل مباشر على واتساب</span>
+    <span>✦ أسعار منافسة</span>
+    <span>✦ منتقاة بعناية</span>
+  </div>
+</div>
+
 <!-- ════════════ CATEGORIES ════════════ -->
 <section id="products" style="padding: 100px 0;">
   <div class="container">
@@ -1728,8 +1944,8 @@ footer {
       </div>
     </div>
     <div style="position:relative">
-      <button onclick="scrollCats(-1)" style="position:absolute;right:-20px;top:50%;transform:translateY(-50%);z-index:5;width:40px;height:40px;border-radius:50%;background:white;border:1.5px solid rgba(201,168,76,0.4);box-shadow:0 4px 12px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='var(--gold)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='inherit'">‹</button>
-      <button onclick="scrollCats(1)" style="position:absolute;left:-20px;top:50%;transform:translateY(-50%);z-index:5;width:40px;height:40px;border-radius:50%;background:white;border:1.5px solid rgba(201,168,76,0.4);box-shadow:0 4px 12px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='var(--gold)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='inherit'">›</button>
+      <button class="cat-scroll-btn" onclick="scrollCats(-1)" style="position:absolute;right:-20px;top:50%;transform:translateY(-50%);z-index:5;width:40px;height:40px;border-radius:50%;background:white;border:1.5px solid rgba(201,168,76,0.4);box-shadow:0 4px 12px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='var(--gold)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='inherit'">‹</button>
+      <button class="cat-scroll-btn" onclick="scrollCats(1)" style="position:absolute;left:-20px;top:50%;transform:translateY(-50%);z-index:5;width:40px;height:40px;border-radius:50%;background:white;border:1.5px solid rgba(201,168,76,0.4);box-shadow:0 4px 12px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='var(--gold)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='inherit'">›</button>
       <div class="categories-grid reveal" id="cats-grid"></div>
     </div>
   </div>
@@ -1995,6 +2211,25 @@ footer {
           <a href="#about">الداخل والقدس — 70₪</a>
         </div>
       </div>
+      <div>
+        <div class="footer-col-title">سياساتنا</div>
+        <div class="footer-links">
+          <a href="javascript:void(0)" onclick="openPolicy('return')">سياسة الاستبدال والإرجاع</a>
+          <a href="javascript:void(0)" onclick="openPolicy('shipping')">سياسة الشحن</a>
+          <a href="javascript:void(0)" onclick="openPolicy('privacy')">سياسة الخصوصية</a>
+          <a href="javascript:void(0)" onclick="openPolicy('terms')">الشروط والأحكام</a>
+        </div>
+      </div>
+    </div>
+    <div class="newsletter-row reveal">
+      <div>
+        <div class="newsletter-title">اشتركي في النشرة البريدية</div>
+        <div class="newsletter-desc">احصلي على أحدث العروض والتشكيلات قبل الجميع</div>
+      </div>
+      <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+        <input type="email" placeholder="بريدك الإلكتروني" required class="newsletter-input" id="newsletter-input">
+        <button type="submit" class="newsletter-btn">اشتركي ←</button>
+      </form>
     </div>
     <div class="footer-bottom">
       <div>© 2026 <span>Royal Way Store</span> — جميع الحقوق محفوظة</div>
@@ -2006,6 +2241,16 @@ footer {
     </div>
   </div>
 </footer>
+
+<!-- POLICY MODAL -->
+<div id="policy-overlay" onclick="if(event.target===this)closePolicy()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);z-index:650;align-items:center;justify-content:center;padding:24px;">
+  <div style="background:#fff;border-radius:20px;max-width:600px;width:100%;max-height:80vh;overflow-y:auto;padding:36px;position:relative;border:1px solid rgba(201,168,76,0.3)">
+    <button onclick="closePolicy()" style="position:absolute;top:16px;left:16px;width:36px;height:36px;border-radius:50%;background:var(--gray-100);border:none;font-size:18px;cursor:pointer">✕</button>
+    <div id="policy-title" style="font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--gray-900);margin-bottom:8px"></div>
+    <div style="width:50px;height:2px;background:var(--gold);margin-bottom:20px"></div>
+    <div id="policy-content" style="font-size:14px;line-height:1.9;color:var(--gray-700)"></div>
+  </div>
+</div>
 
 <!-- CART DRAWER -->
 <div id="cart-overlay" onclick="if(event.target===this)closeCart()">
@@ -2201,7 +2446,7 @@ function renderCategories() {
     </div>
   `).join('');
 }
-let products = getRWData('rw_products', DEFAULT_PRODUCTS).filter(p => p.status !== 'unavailable');
+let products = getRWData('rw_products', DEFAULT_PRODUCTS);
 
 const reviews = [
   { name:'سارة المنصور', date:'منذ أسبوع', stars:5, text:'تجربة تسوق استثنائية! الجودة فاقت توقعاتي بكثير. العباءة وصلت في يومين والتغليف كان راقياً جداً. سأتسوق مرة أخرى بالتأكيد.' },
@@ -2215,15 +2460,24 @@ const reviews = [
 let currentLang = 'ar';
 let pendingOrderProductId = null;
 
+function isProductNew(p) {
+  if (!p.createdAt) return false;
+  const days = (Date.now() - new Date(p.createdAt).getTime()) / 86400000;
+  return days >= 0 && days < 7;
+}
 function productCardHTML(p) {
+  const soldOut = p.status === 'unavailable';
+  const autoNew = !p.badge && isProductNew(p);
+  const finalBadge = p.badge || (autoNew ? 'new' : null);
   return `
-    <div class="product-card reveal" onclick="openModal(${p.id})" style="animation-delay:${Math.random()*0.3}s">
+    <div class="product-card reveal ${soldOut ? 'is-soldout' : ''}" onclick="${soldOut ? '' : `openModal(${p.id})`}" style="animation-delay:${Math.random()*0.3}s">
       <div class="product-img-wrap">
         <div class="product-img-placeholder" style="background:#200c16${p.img?';padding:0;overflow:hidden':''}">
           ${p.img ? `<img src="${p.img}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'">` : {women:`<svg width="60" height="80" viewBox="0 0 60 80" fill="none" stroke="#c96b8a" stroke-width="1.5"><path d="M30 5c-6 0-10 4-10 8l-12 20h8v40h28V33h8L40 13c0-4-4-8-10-8z"/></svg>`,men:`<svg width="60" height="80" viewBox="0 0 60 80" fill="none" stroke="#c9a84c" stroke-width="1.5"><path d="M20 8h20v10l10 15h-8v40H18V33h-8L20 18z"/></svg>`,acc:`<svg width="70" height="60" viewBox="0 0 70 60" fill="none" stroke="#c96b8a" stroke-width="1.5"><path d="M10 20h50v35H10z"/><path d="M22 20c0-7 5-14 13-14s13 7 13 14"/></svg>`,kids:`<svg width="50" height="80" viewBox="0 0 50 80" fill="none" stroke="#c9a84c" stroke-width="1.5"><circle cx="25" cy="12" r="10"/><path d="M10 28c4-4 8-6 15-6s11 2 15 6l5 25H30l-5 20h0l-5-20H5z"/></svg>`}[p.cat]||''}
         </div>
+        ${soldOut ? '<div class="soldout-overlay">نفذت الكمية</div>' : ''}
         <div class="product-badges">
-          ${p.badge ? `<span class="badge badge-${p.badge}">${p.badge==='new'?'جديد':p.badge==='sale'?'تخفيض':'رائج'}</span>` : ''}
+          ${finalBadge ? `<span class="badge badge-${finalBadge}">${finalBadge==='new'?'جديد':finalBadge==='sale'?'تخفيض':'رائج'}</span>` : ''}
         </div>
         <div class="product-actions" onclick="event.stopPropagation()">
           <button class="product-action-btn" onclick="orderProduct(${p.id})" title="اطلب الآن"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></button>
@@ -2245,7 +2499,7 @@ function productCardHTML(p) {
         <div class="product-colors">
           ${p.colors.map(c=>`<div class="color-dot" style="background:${c}" title="${c}"></div>`).join('')}
         </div>
-        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${p.id})">أضيفي للسلة</button>
+        <button class="add-to-cart-btn" ${soldOut ? 'disabled' : ''} onclick="event.stopPropagation(); ${soldOut ? '' : `addToCart(${p.id})`}">${soldOut ? 'غير متوفر' : 'أضيفي للسلة'}</button>
       </div>
     </div>
   `;
@@ -2443,15 +2697,29 @@ function startCountdown() {
   if (offer.end) {
     end = new Date(offer.end);
   } else {
-    end = new Date();
-    end.setDate(end.getDate() + 5);
-    end.setHours(end.getHours() + 12);
-    end.setMinutes(end.getMinutes() + 34);
+    // First-time: anchor 7 days from now and persist
+    let anchor = localStorage.getItem('rw_offer_anchor');
+    if (!anchor) {
+      anchor = String(Date.now() + 7*86400000);
+      localStorage.setItem('rw_offer_anchor', anchor);
+    }
+    end = new Date(Number(anchor));
   }
+
+  if (window._countdownInterval) clearInterval(window._countdownInterval);
 
   function update() {
     const now = new Date();
-    const diff = Math.max(0, end - now);
+    const diff = end - now;
+    if (diff <= 0) {
+      ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.textContent = '00';
+      });
+      const descEl = document.querySelector('.countdown-desc');
+      if (descEl) descEl.innerHTML = '<span style="color:var(--gold)">انتهى العرض — تابعونا للعروض القادمة</span>';
+      clearInterval(window._countdownInterval);
+      return;
+    }
     const d = Math.floor(diff / 86400000);
     const h = Math.floor((diff % 86400000) / 3600000);
     const m = Math.floor((diff % 3600000) / 60000);
@@ -2463,7 +2731,7 @@ function startCountdown() {
     document.getElementById('cd-secs').textContent = fmt(s);
   }
   update();
-  setInterval(update, 1000);
+  window._countdownInterval = setInterval(update, 1000);
 }
 
 function applyNotifBar() {
@@ -2474,6 +2742,74 @@ function applyNotifBar() {
   bar.style.display = '';
   const textNode = bar.childNodes[0];
   if (textNode && textNode.nodeType === 3) textNode.nodeValue = '\n  ' + notif.text + '\n  ';
+}
+
+// Policies
+const POLICIES = {
+  return: {
+    title: 'سياسة الاستبدال والإرجاع',
+    body: `<p>يحق للعميلة طلب استبدال أو إرجاع المنتج خلال <strong>3 أيام</strong> من تاريخ الاستلام.</p>
+<p style="margin-top:14px"><strong>الشروط:</strong></p>
+<ul style="padding-right:20px;margin-top:8px">
+<li>أن يكون المنتج بحالته الأصلية (غير مستخدم، غير مغسول).</li>
+<li>إرفاق صورة المنتج عند التواصل عبر واتساب.</li>
+<li>الملابس الداخلية ومستحضرات التجميل غير قابلة للاستبدال.</li>
+</ul>
+<p style="margin-top:14px">لطلب الاستبدال، تواصلي معنا على واتساب: <strong dir="ltr">0593997054</strong></p>`
+  },
+  shipping: {
+    title: 'سياسة الشحن',
+    body: `<p>نوصل لكافة مناطق فلسطين بأسعار منافسة:</p>
+<ul style="padding-right:20px;margin-top:10px">
+<li><strong>داخل جنين:</strong> 10 ₪ — التوصيل خلال 24 ساعة</li>
+<li><strong>الضفة الغربية:</strong> 20 ₪ — التوصيل 2-3 أيام</li>
+<li><strong>الداخل والقدس:</strong> 70 ₪ — التوصيل 5-7 أيام</li>
+</ul>
+<p style="margin-top:14px"><strong>الدفع:</strong> عند الاستلام كاش.</p>
+<p style="margin-top:8px">المنتجات المطلوبة من Shein مباشرة تحتاج 2-3 أسابيع للوصول.</p>`
+  },
+  privacy: {
+    title: 'سياسة الخصوصية',
+    body: `<p>خصوصيتك أولويتنا. نحن نلتزم بحماية بياناتك الشخصية:</p>
+<ul style="padding-right:20px;margin-top:10px">
+<li>لا نشارك بياناتك (الاسم، الرقم، العنوان) مع أي طرف ثالث.</li>
+<li>تُستخدم بياناتك فقط لتنفيذ طلباتك والتواصل معك.</li>
+<li>يحق لك طلب حذف بياناتك في أي وقت.</li>
+</ul>
+<p style="margin-top:14px">للاستفسارات، تواصلي معنا على واتساب: <strong dir="ltr">0593997054</strong></p>`
+  },
+  terms: {
+    title: 'الشروط والأحكام',
+    body: `<p>باستخدامك للموقع وإجراء طلب، فإنك توافقين على:</p>
+<ul style="padding-right:20px;margin-top:10px">
+<li>الأسعار المعروضة بالشيكل وقابلة للتغيير دون إشعار مسبق.</li>
+<li>تأكيد الطلب يتم عبر واتساب بعد التواصل المباشر.</li>
+<li>المنتجات معروضة بحسن نية وقد تختلف الألوان الفعلية قليلاً.</li>
+<li>Royal Way Store غير مسؤول عن تأخير شركات الشحن الخارجية.</li>
+</ul>`
+  }
+};
+function openPolicy(key) {
+  const p = POLICIES[key]; if (!p) return;
+  document.getElementById('policy-title').textContent = p.title;
+  document.getElementById('policy-content').innerHTML = p.body;
+  document.getElementById('policy-overlay').style.display = 'flex';
+}
+function closePolicy() {
+  document.getElementById('policy-overlay').style.display = 'none';
+}
+
+// Newsletter
+function subscribeNewsletter(e) {
+  e.preventDefault();
+  const input = document.getElementById('newsletter-input');
+  const email = (input.value || '').trim();
+  if (!email) return;
+  const list = JSON.parse(localStorage.getItem('rw_newsletter') || '[]');
+  if (!list.includes(email)) list.push(email);
+  localStorage.setItem('rw_newsletter', JSON.stringify(list));
+  input.value = '';
+  showToast('تم الاشتراك بنجاح ✓');
 }
 
 // Cart
@@ -2590,6 +2926,34 @@ let currentSlide = 0;
 const totalSlides = 3;
 let sliderInterval = null;
 
+function splitWords(el) {
+  if (!el || el.dataset.split) return;
+  const html = el.innerHTML;
+  // Split by visible words, preserve <br> and <em>
+  el.innerHTML = html.replace(/(<em>.*?<\/em>|<br\s*\/?>)|([^\s<>]+)/g, (m, tag, word) => {
+    if (tag) return tag.startsWith('<em') ? `<span class="word"><em>${tag.replace(/<\/?em>/g,'')}</em></span>` : tag;
+    if (word) return `<span class="word">${word}</span>`;
+    return m;
+  });
+  // Stagger delays
+  el.querySelectorAll('.word').forEach((w, i) => {
+    w.style.animationDelay = (0.2 + i * 0.08) + 's';
+  });
+  el.dataset.split = '1';
+}
+function animateSlideText(n) {
+  const contents = document.querySelectorAll('.slide-content');
+  const title = contents[n]?.querySelector('.hero-title');
+  if (title) {
+    splitWords(title);
+    // Re-trigger animation on slide change
+    title.querySelectorAll('.word').forEach(w => {
+      w.style.animation = 'none';
+      void w.offsetWidth;
+      w.style.animation = '';
+    });
+  }
+}
 function goToSlide(n) {
   const slides = document.querySelectorAll('.hero-slide');
   const contents = document.querySelectorAll('.slide-content');
@@ -2601,6 +2965,7 @@ function goToSlide(n) {
   slides[currentSlide].classList.add('active');
   contents[currentSlide].classList.add('active');
   dots[currentSlide].classList.add('active');
+  animateSlideText(n);
 }
 
 function nextSlide() {
@@ -2608,7 +2973,8 @@ function nextSlide() {
 }
 
 function startSlider() {
-  sliderInterval = setInterval(nextSlide, 4000);
+  animateSlideText(0);
+  sliderInterval = setInterval(nextSlide, 5500);
 }
 
 function scrollCats(dir) {
