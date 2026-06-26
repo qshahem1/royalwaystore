@@ -2552,15 +2552,6 @@ const DEFAULT_PRODUCTS = [
 ];
 function getRWData(key, def) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e) { return def; } }
 
-// إذا الأقسام المحفوظة كلها معطلة = بيانات قديمة/خربانة → امسحها تا ترجع للافتراضي
-(function migrateCats() {
-  try {
-    const saved = JSON.parse(localStorage.getItem('rw_categories'));
-    if (saved && Array.isArray(saved) && saved.every(c => c.active === false || c.active === undefined)) {
-      localStorage.removeItem('rw_categories');
-    }
-  } catch(e) { localStorage.removeItem('rw_categories'); }
-})();
 
 function renderCategories() {
   const DEFAULT_CATS = [
@@ -2586,14 +2577,19 @@ function renderCategories() {
     {id:'school',  active:false, name:'مستلزمات مدرسية', img:'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=200&q=80'},
   ];
   const saved = getRWData('rw_categories', null);
-  const merged = DEFAULT_CATS.map(def => {
-    const s = saved ? saved.find(x => x.id === def.id) : null;
-    const active = (s && typeof s.active === 'boolean') ? s.active : def.active;
-    return { ...def, ...(s || {}), active };
-  });
-  const cats = merged.filter(c => c.active === true);
-  const finalCats = cats.length > 0 ? cats : DEFAULT_CATS.filter(c => c.active === true);
+  // If user has saved categories, trust them as the source of truth (includes user-added ones).
+  // Otherwise fall back to DEFAULT_CATS.
+  const merged = Array.isArray(saved)
+    ? saved.map(s => {
+        const def = DEFAULT_CATS.find(d => d.id === s.id);
+        return { ...(def || {}), ...s, active: s.active === true };
+      })
+    : DEFAULT_CATS;
+  const finalCats = merged.filter(c => c.active === true);
   const grid = document.getElementById('cats-grid');
+  // Hide the whole categories section if no active categories
+  const catsSection = document.getElementById('products');
+  if (catsSection) catsSection.style.display = finalCats.length === 0 ? 'none' : '';
   grid.innerHTML = finalCats.map(c => `
     <div class="cat-card" onclick="location.href='category.html?cat=${c.id}'">
       <div class="cat-circle">
