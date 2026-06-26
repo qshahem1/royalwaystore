@@ -1616,6 +1616,152 @@ footer {
 }
 .footer-bottom span { color: var(--gold); }
 
+/* ── PICKUP SECTION ── */
+.pickup-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #faf8f5 0%, #f2ede2 100%);
+  position: relative;
+  overflow: hidden;
+}
+.pickup-section::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -10%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.pickup-header { text-align: center; max-width: 720px; margin: 0 auto 48px; position: relative; z-index: 1; }
+.pickup-tag {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.pickup-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  color: var(--gray-900);
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+.pickup-title em { font-style: italic; color: var(--gold-dark); }
+.pickup-desc { font-size: 15px; color: var(--gray-700); line-height: 1.8; }
+.pickup-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.pickup-card {
+  background: #fff;
+  border: 1.5px solid rgba(201,168,76,0.2);
+  border-radius: 18px;
+  padding: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  transition: all 0.35s var(--ease);
+  cursor: default;
+}
+.pickup-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(201,168,76,0.18);
+}
+.pickup-card-icon {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(201,168,76,0.3);
+}
+.pickup-card-info { flex: 1; min-width: 0; }
+.pickup-card-name {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--gray-900);
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+.pickup-card-area {
+  font-size: 13px;
+  color: var(--gray-500);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pickup-card-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+@media (max-width: 600px) {
+  .pickup-section { padding: 50px 0; }
+  .pickup-header { margin-bottom: 28px; }
+  .pickup-card { padding: 16px; gap: 12px; }
+  .pickup-card-icon { width: 46px; height: 46px; }
+  .pickup-card-name { font-size: 16px; }
+}
+
+/* ── LOCATIONS ── */
+.locations-row {
+  padding: 28px 0 24px;
+  margin: 32px 0 0;
+  border-top: 1px solid rgba(201,168,76,0.15);
+}
+.locations-row:empty, #locations-row.is-empty { display: none; }
+.locations-title {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: #faf8f5;
+  margin-bottom: 18px;
+}
+.locations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+.location-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition: all 0.25s;
+}
+.location-card:hover {
+  border-color: rgba(201,168,76,0.5);
+  background: rgba(255,255,255,0.06);
+  transform: translateY(-2px);
+}
+.location-pin {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(201,168,76,0.15);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: var(--gold);
+}
+.location-name { font-size: 14px; font-weight: 600; color: #faf8f5; line-height: 1.3; }
+.location-area { font-size: 12px; color: #888; margin-top: 2px; }
+
 /* ── NEWSLETTER ── */
 .newsletter-row {
   display: flex;
@@ -1948,6 +2094,18 @@ footer {
       <button class="cat-scroll-btn" onclick="scrollCats(1)" style="position:absolute;left:-20px;top:50%;transform:translateY(-50%);z-index:5;width:40px;height:40px;border-radius:50%;background:white;border:1.5px solid rgba(201,168,76,0.4);box-shadow:0 4px 12px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='var(--gold)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='inherit'">›</button>
       <div class="categories-grid reveal" id="cats-grid"></div>
     </div>
+  </div>
+</section>
+
+<!-- ════════════ PICKUP POINTS ════════════ -->
+<section id="pickup-section" class="pickup-section">
+  <div class="container">
+    <div class="pickup-header reveal">
+      <div class="pickup-tag">✦ ميزة إضافية</div>
+      <h2 class="pickup-title">توصيل لبابك <em>أو</em> استلام من نقاطنا</h2>
+      <p class="pickup-desc">اختاري الطريقة الأنسب لكِ — نوصلك على بيتك أو استلمي من إحدى نقاطنا الموثوقة في جنين</p>
+    </div>
+    <div class="pickup-grid reveal" id="pickup-grid"></div>
   </div>
 </section>
 
@@ -2733,6 +2891,38 @@ function startCountdown() {
   window._countdownInterval = setInterval(update, 1000);
 }
 
+function renderLocations() {
+  const settings = getRWData('rw_settings', {});
+  let list = Array.isArray(settings.locations) ? settings.locations : null;
+  if (!list && (settings.loc1name || settings.loc2name)) {
+    list = [];
+    if (settings.loc1name) list.push({name: settings.loc1name, area: settings.loc1area||''});
+    if (settings.loc2name) list.push({name: settings.loc2name, area: settings.loc2area||''});
+  }
+  if (!list) list = [{name:'جنين — سوبر ماركت سعيد', area:'دوار السينما'}, {name:'جنين — مكتب الرويال', area:'شارع حيفا'}];
+  const valid = list.filter(l => (l.name||'').trim());
+  const section = document.getElementById('pickup-section');
+  const grid = document.getElementById('pickup-grid');
+  if (!section || !grid) return;
+  if (valid.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  grid.innerHTML = valid.map(l => `
+    <div class="pickup-card">
+      <div class="pickup-card-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <div class="pickup-card-info">
+        <div class="pickup-card-name">${l.name}</div>
+        ${l.area ? `<div class="pickup-card-area">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          ${l.area}
+        </div>` : ''}
+        <div class="pickup-card-badge">نقطة استلام</div>
+      </div>
+    </div>
+  `).join('');
+}
+
 function applyNotifBar() {
   const notif = getRWData('rw_notif', {visible:true, text:'✦ توصيل سريع لجنين 10₪ · الضفة 20₪ · الداخل والقدس 70₪ — تواصل معنا على واتساب الآن ✦'});
   const bar = document.getElementById('notif-bar');
@@ -3009,6 +3199,7 @@ document.addEventListener('keydown', e => {
 
 window.addEventListener('load', () => {
   applyNotifBar();
+  renderLocations();
   renderCategories();
   renderBestSellers();
   renderProducts();
