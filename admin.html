@@ -328,18 +328,53 @@ textarea.form-input{min-height:80px;resize:vertical}
 .confirm-msg{font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.6}
 .confirm-actions{display:flex;gap:12px;justify-content:center}
 
+/* ── HAMBURGER / BACKDROP ── */
+.sidebar-toggle{
+  display:none;width:38px;height:38px;border-radius:8px;background:transparent;
+  align-items:center;justify-content:center;color:var(--dark);
+  border:1.5px solid var(--border);transition:background 0.2s;
+}
+.sidebar-toggle:hover{background:var(--bg)}
+.sidebar-backdrop{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);
+  z-index:95;backdrop-filter:blur(2px);
+}
+.sidebar-backdrop.open{display:block}
+
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
-  .sidebar{transform:translateX(100%)}
+  .sidebar{transform:translateX(100%);box-shadow:-12px 0 40px rgba(0,0,0,0.2)}
   .sidebar.open{transform:none}
   .main{margin-right:0}
   .stats-grid{grid-template-columns:1fr 1fr}
   .form-grid{grid-template-columns:1fr}
+  .sidebar-toggle{display:flex}
+  .page-title{font-size:18px}
+  .view-site-text{display:none}
+  .view-site-btn{padding:9px 12px}
 }
 @media(max-width:600px){
-  .stats-grid{grid-template-columns:1fr}
-  .content{padding:16px}
-  .topbar{padding:0 16px}
+  .stats-grid{grid-template-columns:1fr;gap:12px}
+  .content{padding:14px}
+  .topbar{padding:0 12px;height:56px}
+  .sidebar{width:280px}
+  .stat-card{padding:18px}
+  .stat-num{font-size:22px}
+  .page-title{font-size:16px}
+  .section-title{font-size:18px}
+  .card{padding:18px 14px;border-radius:12px}
+  .form-input,.form-select,.form-textarea{font-size:14px;padding:11px 14px}
+  .form-label{font-size:13px}
+  .btn{font-size:13px;padding:11px 16px}
+  table{font-size:13px}
+  th,td{padding:10px 8px}
+  .modal{padding:22px 16px;max-height:90vh;width:calc(100% - 24px)}
+  .modal-title{font-size:18px}
+  .tabs{flex-wrap:wrap;gap:6px}
+  .tab{font-size:12px;padding:8px 12px}
+  .topbar-actions{gap:6px}
+  .cat-grid-admin{grid-template-columns:1fr 1fr !important;gap:10px}
+  .product-row-admin{flex-wrap:wrap !important}
 }
 </style>
 </head>
@@ -415,14 +450,20 @@ textarea.form-input{min-height:80px;resize:vertical}
 <!-- MAIN -->
 <main class="main">
   <div class="topbar">
-    <div class="page-title" id="page-title">نظرة عامة</div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="القائمة">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="page-title" id="page-title">نظرة عامة</div>
+    </div>
     <div class="topbar-actions">
       <a href="index.html" target="_blank" class="view-site-btn">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        عرض الموقع
+        <span class="view-site-text">عرض الموقع</span>
       </a>
     </div>
   </div>
+  <div class="sidebar-backdrop" onclick="toggleSidebar()"></div>
   <div class="content">
 
     <!-- ════ OVERVIEW ════ -->
@@ -964,6 +1005,22 @@ function showSection(id, el) {
   if (id === 'categories') renderCategoriesAdmin();
   const titles = {overview:'نظرة عامة',products:'المنتجات',categories:'الأقسام',offers:'العروض والكاونتداون',notif:'شريط الإشعار',settings:'إعدادات المتجر',password:'تغيير كلمة المرور'};
   document.getElementById('page-title').textContent = titles[id] || '';
+  // Auto-close sidebar on mobile after navigation
+  if (window.innerWidth <= 900) closeSidebar();
+}
+
+function toggleSidebar() {
+  const sb = document.querySelector('.sidebar');
+  const bd = document.querySelector('.sidebar-backdrop');
+  const open = !sb.classList.contains('open');
+  sb.classList.toggle('open', open);
+  bd.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeSidebar() {
+  document.querySelector('.sidebar').classList.remove('open');
+  document.querySelector('.sidebar-backdrop').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 // ════ INIT ════
