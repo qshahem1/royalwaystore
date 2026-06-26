@@ -629,6 +629,10 @@ textarea.form-input{min-height:80px;resize:vertical}
       <div class="card">
         <div class="card-header">
           <div class="card-title">إدارة الأقسام</div>
+          <button class="btn btn-gold btn-sm" onclick="addNewCategory()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            قسم جديد
+          </button>
         </div>
         <div id="categories-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;padding:20px"></div>
       </div>
@@ -992,7 +996,10 @@ function renderCategoriesAdmin() {
   const list = document.getElementById('categories-list');
   list.innerHTML = cats.map((c,i) => `
     <div style="background:var(--bg);border-radius:14px;padding:16px;border:1px solid ${c.active?'rgba(201,168,76,0.5)':'var(--border)'};position:relative;opacity:${c.active?'1':'0.65'}">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <button onclick="deleteCategory(${i})" title="حذف القسم" style="position:absolute;top:10px;left:10px;width:28px;height:28px;border-radius:50%;background:rgba(198,40,40,0.1);color:var(--danger);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px" onmouseover="this.style.background='var(--danger)';this.style.color='#fff'" onmouseout="this.style.background='rgba(198,40,40,0.1)';this.style.color='var(--danger)'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+      </button>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-right:36px">
         <span style="font-size:12px;font-weight:600;color:${c.active?'var(--gold)':'#666'}">${c.active?'● مفعّل':'○ معطّل'}</span>
         <label class="toggle" style="margin:0"><input type="checkbox" ${c.active?'checked':''} onchange="cats[${i}].active=this.checked;saveCats();renderCategoriesAdmin()"><span class="toggle-slider"></span></label>
       </div>
@@ -1031,6 +1038,35 @@ function uploadCatImg(input, i) {
 function saveCats() {
   setData('rw_categories', cats);
   toast('تم حفظ الأقسام بنجاح', 'success');
+}
+
+function addNewCategory() {
+  // Generate a unique id
+  let id = 'cat' + Date.now().toString(36);
+  cats.push({ id, active: true, name: 'قسم جديد', img: '' });
+  setData('rw_categories', cats);
+  renderCategoriesAdmin();
+  // Scroll to last card so the new one is visible
+  setTimeout(() => {
+    const cards = document.querySelectorAll('#categories-list > div');
+    cards[cards.length-1]?.scrollIntoView({behavior:'smooth', block:'center'});
+    cards[cards.length-1]?.querySelector('input.form-input')?.focus();
+  }, 50);
+  toast('تم إضافة قسم جديد — عدّل اسمه وصورته', 'success');
+}
+
+function deleteCategory(i) {
+  const c = cats[i]; if (!c) return;
+  showConfirm(
+    `سيتم حذف القسم "${c.name}" نهائياً.\nالمنتجات في هذا القسم لن تُحذف لكن قد لا تظهر بشكل صحيح.`,
+    () => {
+      cats.splice(i, 1);
+      setData('rw_categories', cats);
+      renderCategoriesAdmin();
+      toast('تم حذف القسم', 'success');
+    },
+    { title: 'حذف قسم', icon: '🗑️', yesLabel: 'حذف نهائي' }
+  );
 }
 
 // ════ NAVIGATION ════
